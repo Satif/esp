@@ -1,0 +1,50 @@
+{
+  "Groups": [
+    {
+      "name": "DrugAddition, WT, 24hrs",
+      "start_time": 1125,
+      "duration": 75,
+      "irradiance": 6,
+      "cycles": 1,
+      "offtime": 0,
+      "Channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "noDrugAddition, WT, 24hrs",
+      "start_time": 0,
+      "duration": 0,
+      "irradiance": 0,
+      "cycles": 2,
+      "offtime": 10,
+      "Channels": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "name": "DrugAddition, WT, 24hrs",
+      "start_time": 0,
+      "duration": 1200,
+      "irradiance": 6,
+      "cycles": 1,
+      "offtime": 0,
+      "Channels": [
+        93,
+        94,
+        95,
+        96
+      ]
+    }
+  ]
+}

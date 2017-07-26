@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="viewport" content="width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=0"/>
+  <title>ESP8266 MPS Control</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/milligram.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body ng-app="app" ng-controller="appCtrl">
+  <header class="header gradient">
+    <div class="wrapper">
+      <h2>MICROPLATE PHOTOIRRADIATION SYSTEM (MPS)</h2>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row mb-20">
+      <div class="column">
+        <form id="sendSerialText" class="pt-20 mb-0" ng-submit="sendSocketManually(inputDirectMessage);">
+          <fieldset>
+            <label for="inputDirectField">Manual Control: Input Direct ASKII Commands to Test</label>
+            <div class="row">
+              <input type="text" id="inputDirectField" class="no-right-border" ng-model="inputDirectMessage">
+              <input class="button-primary gradient no-left-border" type="submit" value="Send" ng-disabled="!inputDirectMessage">
+            </div>
+          </fieldset>
+        </form>
+
+        <hr class="color-blue">
+
+        <form id="uploadJsonForm" class="pt-20 mb-0" ng-submit="uploadJsonFiles();">
+          <fieldset>
+            <label for="filesToUpload">Select JSON file to onboard (up to 5 total)</label>
+            <div class="row">
+              <input id="filesToUpload" type="file" accept=".json" multiple file-change handler="makeFileList(files)"/>
+              <input class="button-primary gradient no-left-border" type="submit" value="Upload" ng-disabled="!files">
+            </div>
+          </fieldset>
+        </form>
+
+        <ul id="fileList">
+          <li ng-if="files && !files.length">No Files Selected</li>
+          <li ng-repeat="file in files track by $index">
+            {{file.name}}
+          </li>
+        </ul>
+      </div>
+
+      <div class="column pt-20">
+        <div class="text-center mb-8">
+          <b>MPS STATUS VIEW</b>
+        </div>
+        <div id="receiveText" class="receiveBlock">
+          <div class="row" ng-repeat="item in resultsText | orderBy: 'date' : 'asc' track by $index">
+            <b class="column-10">{{item.date | date:'HH:mm:ss'}}</b>
+            <span class="column">{{item.text}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column column-33">
+        <div>
+          <label for="selectExp">Select experiment from uploaded file</label>
+          <select id="selectExp" ng-model="selectedExperiment" ng-change="selectExperiment()" ng-disabled="!uploadedFiles" ng-options="opt.name for opt in uploadedFiles">
+          </select>
+        </div>
+
+        <div>
+          <button class="gradient" type="button" id="runExperiment" name="runExperiment" ng-click="runExperiment();" ng-disabled="!dataExperiment">Run</button>
+          <button class="gradient" type="button" id="stopExperiment" name="stopExperiment" ng-click="stopExperiment();" ng-disabled="!dataExperiment">Stop</button>
+          <button class="gradient" type="button" id="removeExperiment" name="removeExperiment" ng-click="removeExperiment();" ng-disabled="!dataExperiment">Remove</button>
+        </div>
+
+      </div>
+
+      <div class="column column-66">
+        <div ng-if="dataExperiment">
+          <div class="text-center mb-7">
+            <b>VIEW SELECTED JSON EXPERIMENT</b>
+          </div>
+          <table id="resultTable">
+            <thead>
+              <tr>
+                <th>Condition Time (s)</th>
+                <th>Selected Wells</th>
+                <th>Irradiance (mW/cm<sup>2</sup>)</th>
+                <th>Duration (s)</th>
+                <th>Start Delay (s)</th>
+                <th># of Cycles</th>
+                <th>Off</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="data in dataExperiment track by $index">
+                <td>{{data.name}}</td>
+                <td><span ng-repeat="channel in data.Channels track by $index">{{channel}} <em ng-if="!$last">,</em></span></td>
+                <td>{{data.irradiance}}</td>
+                <td>{{data.duration}}</td>
+                <td>{{data.start_time}}</td>
+                <td>{{data.cycles}}</td>
+                <td>{{data.offtime}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/angular.min.js"></script>
+  <script src="js/ang.js"></script>
+</body>
+</html>
