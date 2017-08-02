@@ -90,14 +90,11 @@ input[type=file] {
   line-height: 14px;
 }
 
-.receiveBlock span {
-  font-size: 13px;
-}
-
-.receiveBlock b {
+.receiveBlock .column {
   font-size: 13px;
   font-weight: normal;
   color: #0d86dd;
+  margin-bottom: 5px;
 }
 
 .header h2 {
